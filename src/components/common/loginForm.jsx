@@ -1,56 +1,41 @@
-import React, { Component } from "react";
+import React from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import Joi from "joi-browser";
 import "../../App.css";
-class LoginForm extends Component {
+import FormComponent from "./form";
+
+class LoginForm extends FormComponent {
 	state = {
-		formValue: {
+		data: {
 			username: "",
 			password: "",
 		},
-		error: {},
+		errors: {},
 	};
 
-	handleChange = ({ currentTarget: input }) => {
-		const formValue = { ...this.state.formValue };
-		formValue[input.name] = input.value;
-		this.setState({ formValue });
+	schema = {
+		username: Joi.string().required(),
+		password: Joi.string().required(),
 	};
 
-	handleSubmit = e => {
-		e.preventDefault();
+	fieldSchema = {
+		username: Joi.string()
+			.required()
+			.email({ minDomainAtoms: 2 })
+			.label("Username"),
+		password: Joi.string().required().min(5).label("Password"),
+	};
+
+	doSubmit = () => {
 		console.log("submitted");
 	};
 	render() {
-		const { username, password } = this.state.formValue;
 		return (
 			<>
 				<Form onSubmit={this.handleSubmit}>
-					<Form.Group controlId='formBasicEmail'>
-						<Form.Label>UserName</Form.Label>
-						<Form.Control
-							type='text'
-							name='username'
-							onChange={this.handleChange}
-							value={username}
-							placeholder='Enter email'
-						/>
-					</Form.Group>
-
-					<Form.Group controlId='formBasicPassword'>
-						<Form.Label>Password</Form.Label>
-						<Form.Control
-							type='password'
-							name='password'
-							onChange={this.handleChange}
-							value={password}
-							placeholder='Password'
-						/>
-					</Form.Group>
-
-					<Button variant='primary' type='submit'>
-						Submit
-					</Button>
+					{this.renderInput("username", "Username")}
+					{this.renderInput("password", "Password", "password")}
+					{this.renderButton("submit")}
 				</Form>
 			</>
 		);

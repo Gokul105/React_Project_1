@@ -6,7 +6,7 @@ import TableBody from "./tableBody";
 const TableComponent = ({ data, columns, sortColumn, onSort }) => {
 	return (
 		<>
-			<Table striped hover size='sm'>
+			<Table striped hover size='sm' responsive>
 				<TableHeader
 					columns={columns}
 					sortColumn={sortColumn}
